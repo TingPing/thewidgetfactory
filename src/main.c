@@ -113,7 +113,7 @@ void create_ui (void)
 		gtk_tree_view_column_set_reorderable (column, TRUE);
 		gtk_tree_view_column_set_resizable (column, TRUE);
 		gtk_tree_view_column_set_sort_column_id (column, i);
-		gtk_tree_view_append_column (treeview, column);
+		gtk_tree_view_append_column (GTK_TREE_VIEW(treeview), column);
 
 		g_free (name);
 	}

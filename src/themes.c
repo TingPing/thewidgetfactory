@@ -38,7 +38,7 @@ is_themedir (gchar *path)
 GList*
 get_themes (void)
 {
-	gchar *homedir;
+	const gchar *homedir;
 	gchar *dirname;
 	DIR *dir;
 	struct dirent *dent;
@@ -47,10 +47,10 @@ get_themes (void)
 	GList *list=0;
 	gchar *full_path;
 
-	homedir = (gchar*)getenv ("HOME");
+	homedir = g_get_home_dir();
 	settings = gtk_settings_get_default ();
 	
-	dirname = g_strconcat(homedir,"/.themes",NULL);
+	dirname = g_build_filename (homedir, ".themes", NULL);
 	chdir (dirname);
 	dir = opendir (dirname);
 	if (dir)
@@ -59,16 +59,16 @@ get_themes (void)
 		{
 			stat(dent->d_name,&stats);
 			if (!S_ISDIR(stats.st_mode)) continue;
-			if (strcmp(dent->d_name,"." ) == 0) continue;
-			if (strcmp(dent->d_name,"..") == 0) continue;
+			if (g_strcmp0(dent->d_name,"." ) == 0) continue;
+			if (g_strcmp0(dent->d_name,"..") == 0) continue;
 
-			full_path = g_strconcat (homedir, "/.themes/", dent->d_name, NULL);
+			full_path = g_build_filename (homedir, ".themes", dent->d_name, NULL);
 			if (!is_themedir (full_path))
 			{
 				g_free (full_path);
 				continue;
 			}
-			list = g_list_insert_sorted(list, dent->d_name, (GCompareFunc)strcmp);
+			list = g_list_insert_sorted(list, dent->d_name, (GCompareFunc)g_strcmp0);
 		}
 	}
 	
@@ -83,16 +83,16 @@ get_themes (void)
 	        {
 			stat(dent->d_name,&stats);
 			if (!S_ISDIR(stats.st_mode)) continue;
-			if (strcmp(dent->d_name, "." ) == 0) continue;
-			if (strcmp(dent->d_name, "..") == 0) continue;
+			if (g_strcmp0(dent->d_name, "." ) == 0) continue;
+			if (g_strcmp0(dent->d_name, "..") == 0) continue;
 
-			full_path = g_strconcat (dirname, "/", dent->d_name, NULL);
+			full_path = g_build_filename (dirname, dent->d_name, NULL);
 			if (!is_themedir (full_path))
 			{
 				g_free (full_path);
 				continue;
 			}
-			list = g_list_insert_sorted(list, dent->d_name, (GCompareFunc)strcmp);
+			list = g_list_insert_sorted(list, dent->d_name, (GCompareFunc)g_strcmp0);
 	        }
 	}
 
