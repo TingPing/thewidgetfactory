@@ -1,7 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(twf, 0.3)
+AC_INIT([twf], [0.5])
+AM_INIT_AUTOMAKE([1.11 dist-bzip2 subdir-objects no-define foreign])
+AM_SILENT_RULES([yes])
+
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
@@ -29,10 +31,10 @@ dnl Define data dir
 twf_data_dir='$(datadir)/twf'
 AC_SUBST(twf_data_dir)
 
-
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 src/Makefile
 po/Makefile.in
 ])
 
+AC_OUTPUT

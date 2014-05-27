@@ -1,13 +1,10 @@
 ## Process this file with automake to produce Makefile.in
 
-INCLUDES = \
+AM_CFLAGS = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DTWF_DATA=\""$(twf_data_dir)"\" \
 	@PACKAGE_CFLAGS@
-
-AM_CFLAGS = \
-	-rdynamic
 
 bin_PROGRAMS = twf
 
