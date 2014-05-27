@@ -1,0 +1,7 @@
+Overview of Chagnes in 0.3 (since 0.2)
+======================================
+
+* Change theme instantly
+* Refresh current theme instantly
+* Use .glade file to create the UI, so you can change UI without modify the source code.
+* Enable most function of GtkTreeView (resize, reorder, hint, sort)

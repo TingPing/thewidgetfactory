@@ -1,0 +1,21 @@
+2007-12-19	Yang Hong <hongyang@redflag-linux.com>
+
+	* Release twf-0.3
+
+2007-12-19	Yang Hong <hongyang@redflag-linux.com>
+
+	* Deleted generated code by glade-2, Use .glade file to generate UI
+	* Added refresh theme function
+	* Added data into treeview
+	* Move twf.glade into src
+
+2006-03-29	Richard Stellingwerff
+
+	* Release twf-0.2.1
+	* Fixed a segfault on 64bit machines (Thanks to Dann Frazier)
+	* Fixed packaging.
+
+2005-08-26	Richard Stellingwerff
+
+	* Release twf-0.2
+
