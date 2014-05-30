@@ -24,23 +24,17 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include "themes.h"
 
 #define UI_FILE "twf.glade"
 
-typedef struct {
-	gchar *ui_file;
-	GladeXML *gxml;
-} AppData;
-
-static AppData *d;
-
-#define WID(n) glade_xml_get_widget (d->gxml, #n);
+#define WID(n) GTK_WIDGET(gtk_builder_get_object(builder, #n))
 
 void on_scale_value_changed (GtkRange *range, gpointer user_data);
 void on_button_refresh_clicked (GtkWidget *button, gpointer user_data);
+
+static GtkBuilder *builder = NULL;
 
 static gchar *
 get_ui_file (void)
@@ -52,8 +46,8 @@ get_ui_file (void)
 		g_free (fn);
 		fn = g_build_filename (TWF_DATA, UI_FILE, NULL);
 		if (! g_file_test (fn, G_FILE_TEST_EXISTS)) {
-			g_warning ("%s %s",
-				_("Cann't load UI file. File not found:"), fn);
+			g_error ("%s %s",
+				_("Can't load UI file. File not found:"), fn);
 			g_free (fn);
 			return NULL;
 		}
@@ -62,7 +56,7 @@ get_ui_file (void)
 	return fn;
 }
 
-void create_ui (void)
+void create_ui (gchar *ui_file)
 {
 	GtkWidget *window;
 	GtkWidget *combobox1;
@@ -77,11 +71,9 @@ void create_ui (void)
 	GtkListStore *store;
 	GtkCellRenderer *renderer;
 
-	d = g_new0 (AppData, 1);
-
-	d->ui_file = get_ui_file ();
-	d->gxml = glade_xml_new (d->ui_file, NULL, NULL);
-	glade_xml_signal_autoconnect (d->gxml);
+	builder = gtk_builder_new ();
+	gtk_builder_add_from_file (builder, ui_file, NULL);
+	gtk_builder_connect_signals (builder, NULL);
 
 	window = WID(window_main);
 
@@ -183,6 +175,7 @@ on_button_refresh_clicked (GtkWidget *button,
 int
 main (int argc, char *argv[])
 {
+	gchar *ui_file;
 
 #ifdef ENABLE_NLS
 	bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
@@ -190,13 +183,14 @@ main (int argc, char *argv[])
 	textdomain (GETTEXT_PACKAGE);
 #endif
 
+	ui_file = get_ui_file();
+	if (!ui_file)
+		return 1;
+
 	gtk_set_locale ();
 	gtk_init (&argc, &argv);
-
-	create_ui ();
-
+	create_ui (ui_file);
 	gtk_main ();
 
 	return 0;
 }
-
